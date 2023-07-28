@@ -1,0 +1,36 @@
+exports.up = function (knex) {
+  return knex.schema.createTable("nascimento", table => {
+    table.increments("id").primary()
+    table.string("nome").notNull()
+    table.string("CPF").notNull().unique()
+    table.string("natCidade").notNull()
+    table.string("natUf").notNull()
+    table.string("rua").notNull()
+    table.string("num").notNull()
+    table.string("bairro").notNull()
+    table.string("cidade").notNull()
+    table.string("uf").notNull()
+    table.date("dataNascimento").notNull()
+    table.string("hora").notNull()
+    table.string("nomeMae").notNull()
+    table.string("maeMae").notNull()
+    table.string("paiMae").notNull()
+    table.string("ruaMae").notNull()
+    table.string("numMae").notNull()
+    table.string("bairroMae").notNull()
+    table.string("cidadeMae").notNull()
+    table.string("ufMae").notNull()
+    table.string("nomePai").notNull()
+    table.string("maePai").notNull()
+    table.string("paiPai").notNull()
+    table.string("ruaPai").notNull()
+    table.string("numPai").notNull()
+    table.string("bairroPai").notNull()
+    table.string("cidadePai").notNull()
+    table.string("ufPai").notNull()
+  })
+}
+
+exports.down = function (knex) {
+  return knex.schema.dropTable("nascimento")
+}
