@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node index.js",
     "production": "pm2 start index.js --name RegistroCivil",
-    "vercel-build": "knex migrate:latest"
+    "migrate": "knex --knexfile knexfile.js migrate:latest"
   },
   "dependencies": {
     "bcrypt-node": "0.1.0",
