@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node index.js",
     "production": "pm2 start index.js --name RegistroCivil",
-    "vercel-build": "knex migrate:latest"
+    "vercel-build": "npx knex migrate:latest"
   },
   "dependencies": {
     "@vercel/postgres": "^0.4.1",
