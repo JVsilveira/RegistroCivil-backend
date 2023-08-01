@@ -3,5 +3,5 @@ const cors = require("cors")
 
 module.exports = app => {
   app.use(bodyParser.json())
-  app.use(cors("http://localhost:3000"))
+  app.use(cors("https://registro-civil-frontend.vercel.app"))
 }
