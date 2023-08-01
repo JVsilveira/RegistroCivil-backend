@@ -1,15 +1,20 @@
 module.exports = {
-  client: 'postgresql',
-  connection: {
-    database: 'RegistroCivil',
-    user: 'postgres',
-    password: '3100',
-  },
-  pool: {
-    min: 2,
-    max: 10,
-  },
-  migrations: {
-    tableName: 'knex_migrations',
+  development: {
+    client: "pg",
+    connection: {
+      host: "ep-sparkling-field-44311282.us-east-2.aws.neon.tech",
+      port: 5432,
+      database: "neondb",
+      user: "JVsilveira",
+      password: "nNHupZ4sE5vM",
+      ssl: true,
+    },
+    migrations: {
+      directory: "./src/database/migrations",
+      tableName: "knex_migrations",
+    },
+    seeds: {
+      directory: "./src/database/seeds",
+    },
   },
 }
