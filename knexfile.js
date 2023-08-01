@@ -1,13 +1,12 @@
 module.exports = {
   client: "postgresql",
   connection: {
-    PGHOST: "ep-sparkling-field-44311282.us-east-2.aws.neon.tech",
-    PGDATABASE: "neondb",
-    PGUSER: "JVsilveira",
-    PGPASSWORD: "nNHupZ4sE5vM",
-    ENDPOINT_ID: "ep-sparkling-field-44311282",
+    host: "ep-sparkling-field-44311282-pooler.us-east-2.aws.neon.tech",
+    database: "neondb",
+    user: "JVsilveira",
+    password: "nNHupZ4sE5vM",
+    ssl: true,
   },
-
   migrations: {
     tableName: "knex_migrations",
   },
