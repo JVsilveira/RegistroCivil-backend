@@ -8,7 +8,6 @@
   },
   "scripts": {
     "start": "node index.js",
-    "production": "pm2 start index.js --name RegistroCivil",
     "vercel-build": "knex migrate:latest"
   },
   "dependencies": {
