@@ -1,7 +1,7 @@
 module.exports = {
   client: "postgresql",
   connection: {
-    host: "registro-civil-backend.vercel.app",
+    host: "ep-sparkling-field-44311282.us-east-2.aws.neon.tech",
     port: 5432,
     database: "neondb",
     user: "JVsilveira",
