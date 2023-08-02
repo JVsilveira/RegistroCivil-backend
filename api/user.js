@@ -51,7 +51,6 @@ module.exports = app => {
 
   const remove = async (req, res) => {
     const nome = req.params.nome
-    console.log(nome)
     try {
       existsOrError(req.params.nome, "Usuário não informado.")
 
