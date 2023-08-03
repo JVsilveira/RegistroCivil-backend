@@ -1,3 +1,5 @@
+import moment from "moment"
+
 module.exports = app => {
   const validateFields = fields => {
     for (const field of fields) {
@@ -43,6 +45,7 @@ module.exports = app => {
       ])
 
       await app
+
         .db("nascimento")
         .where(builder => {
           builder.whereRaw("unaccent(nome) ILIKE ?", [`%${nomeParam}%`])
@@ -57,7 +60,7 @@ module.exports = app => {
           bairro: nasc.bairro,
           cidade: nasc.cidade,
           uf: nasc.uf,
-          dataNascimento: nasc.dataNascimento,
+          dataNascimento: moment(nasc.dataNascimento).format("YYYY-MM-DD"),
           hora: nasc.hora,
           nomeMae: nasc.nomeMae,
           maeMae: nasc.maeMae,
