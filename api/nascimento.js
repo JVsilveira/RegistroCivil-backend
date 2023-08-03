@@ -44,14 +44,6 @@ module.exports = app => {
 
       await app
 
-      const dataString = nasc.dataNascimento
-      const data = new Date(dataString)
-      const ano = data.getFullYear()
-      const mes = String(data.getMonth() + 1).padStart(2, "0")
-      const dia = String(data.getDate()).padStart(2, "0")
-
-      const dataFormatada = `${ano}-${mes}-${dia}`
-
         .db("nascimento")
         .where(builder => {
           builder.whereRaw("unaccent(nome) ILIKE ?", [`%${nomeParam}%`])
@@ -66,7 +58,7 @@ module.exports = app => {
           bairro: nasc.bairro,
           cidade: nasc.cidade,
           uf: nasc.uf,
-          dataNascimento: dataFormatada,
+          dataNascimento: nasc.dataNascimento,
           hora: nasc.hora,
           nomeMae: nasc.nomeMae,
           maeMae: nasc.maeMae,
