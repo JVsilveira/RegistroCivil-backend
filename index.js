@@ -4,11 +4,7 @@ const db = require("./config/db")
 app.db = db
 const cors = require("cors")
 
-app.use(
-  cors({
-    origin: "https://registro-civil-frontend.vercel.app",
-  })
-)
+app.use(cors())
 
 consign()
   .then("./config/middlewares.js")
