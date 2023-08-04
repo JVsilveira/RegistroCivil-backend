@@ -36,7 +36,7 @@ module.exports = app => {
         },
 
         {
-          value: cas.solteiro,
+          value: cas.estadoCivil,
           message: "Estado civil do nubente 1 não informado",
         },
 
@@ -60,7 +60,7 @@ module.exports = app => {
           message: "Data incompleta nubente 2 ",
         },
         {
-          value: cas.solteiro1,
+          value: cas.estadoCivil1,
           message: "Estado civil do nubente 2 não informado",
         },
 
