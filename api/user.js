@@ -1,13 +1,7 @@
 const bcrypt = require("bcrypt-node")
 
 module.exports = app => {
-  const validateFields = fields => {
-    for (const field of fields) {
-      if (!field.value || field.value.length === 0) {
-        throw new Error(field.message)
-      }
-    }
-  }
+  const { existsOrError, notExistsOrError, equalsOrError } = app.api.validator
 
   const encryptPassword = password => {
     const salt = bcrypt.genSaltSync(10)
@@ -18,39 +12,30 @@ module.exports = app => {
     const user = req.body
 
     try {
-      validateFields([
-        { value: user.nome, message: "Nome não informado" },
-        { value: user.email, message: "E-mail não informado" },
-        { value: user.CPF, message: "CPF não informado" },
-        {
-          value: user.password,
-          message: "Senha não informada",
-        },
-        {
-          value: user.confirmPassword,
-          message: "Confirmação de senha não informada",
-        },
-      ])
+      existsOrError(user.nome, "Nome não informado")
+      existsOrError(user.email, "E-mail não informado")
+      existsOrError(user.password, "Senha não informada")
+      existsOrError(user.confirmPassword, "Confirmação da senha não informada")
+      equalsOrError(
+        user.password,
+        user.confirmPassword,
+        "As senhas não conferem"
+      )
 
-      if (user.password !== user.confirmPassword) {
-        res.status(400).send("As senhas não são iguais")
-      } else {
-        user.password = encryptPassword(user.password)
+      user.password = encryptPassword(user.password)
 
-        delete user.confirmPassword
+      delete user.confirmPassword
 
-        await app.db("users").insert({
-          nome: user.nome,
-          CPF: user.CPF,
-          email: user.email,
-          password: user.password,
-          admin: user.admin,
-        })
-
-        res.status(204).send()
-      }
+      await app.db("users").insert({
+        nome: user.nome,
+        CPF: user.CPF,
+        email: user.email,
+        password: user.password,
+        admin: user.admin,
+      })
+      res.status(204).send()
     } catch (error) {
-      res.status(500).send("Erro ao processar as informações")
+      res.status(500).send({ message })
     }
   }
 
@@ -67,13 +52,15 @@ module.exports = app => {
   const remove = async (req, res) => {
     const nome = req.params.nome
     try {
-      await app
+      existsOrError(req.params.nome, "Usuário não informado.")
+
+      const rowsDeleted = await app
         .db("users")
         .where(builder => {
           builder.whereRaw("nome ILIKE ?", [`${nome}%`])
         })
         .del()
-
+      existsOrError(rowsDeleted, "Usuário não encontrado.")
       res.status(204).send()
     } catch (msg) {
       res.status(400).send(msg)
