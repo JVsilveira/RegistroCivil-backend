@@ -18,38 +18,39 @@ module.exports = app => {
     const user = req.body
 
     try {
+      validateFields([
+        { value: user.nome, message: "Nome não informado" },
+        { value: user.email, message: "E-mail não informado" },
+        { value: user.CPF, message: "CPF não informado" },
+        {
+          value: user.password,
+          message: "Senha não informada",
+        },
+        {
+          value: user.confirmPassword,
+          message: "Confirmação de senha não informada",
+        },
+      ])
+
       if (user.password !== user.confirmPassword) {
-        res.status(500).send("As senhas são diferentes")
+        res.status(400).send("As senhas não são iguais")
       } else {
-        validateFields([
-          { value: user.nome, message: "Nome não informado" },
-          { value: user.email, message: "E-mail não informado" },
-          { value: user.CPF, message: "CPF não informado" },
-          {
-            value: user.password,
-            message: "Senha não informada",
-          },
-          {
-            value: user.confirmPassword,
-            message: "Confirmação de senha não informada",
-          },
-        ])
+        user.password = encryptPassword(user.password)
+
+        delete user.confirmPassword
+
+        await app.db("users").insert({
+          nome: user.nome,
+          CPF: user.CPF,
+          email: user.email,
+          password: user.password,
+          admin: user.admin,
+        })
+
+        res.status(204).send()
       }
-
-      user.password = encryptPassword(user.password)
-
-      delete user.confirmPassword
-
-      await app.db("users").insert({
-        nome: user.nome,
-        CPF: user.CPF,
-        email: user.email,
-        password: user.password,
-        admin: user.admin,
-      })
-      res.status(204).send()
     } catch (error) {
-      res.status(500).send(console.log(error))
+      res.status(500).send("Erro ao processar as informações")
     }
   }
 
