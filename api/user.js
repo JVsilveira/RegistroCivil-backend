@@ -1,7 +1,13 @@
 const bcrypt = require("bcrypt-node")
 
 module.exports = app => {
-  const { existsOrError, notExistsOrError, equalsOrError } = app.api.validator
+  const validateFields = fields => {
+    for (const field of fields) {
+      if (!field.value || field.value.length === 0) {
+        throw new Error(field.message)
+      }
+    }
+  }
 
   const encryptPassword = password => {
     const salt = bcrypt.genSaltSync(10)
@@ -12,15 +18,18 @@ module.exports = app => {
     const user = req.body
 
     try {
-      existsOrError(user.nome, "Nome não informado")
-      existsOrError(user.email, "E-mail não informado")
-      existsOrError(user.password, "Senha não informada")
-      existsOrError(user.confirmPassword, "As senhas precisam ser iguais")
-      equalsOrError(
-        user.password,
-        user.confirmPassword,
-        "As senhas não conferem"
-      )
+      validateFields([
+        { value: user.nome, message: "Nome não informado" },
+        { value: user.email, message: "E-mail não informado" },
+        {
+          value: user.password,
+          message: "Senha não informada",
+        },
+        {
+          value: user.confirmPassword,
+          message: "As senhas precisam ser iguais",
+        },
+      ])
 
       user.password = encryptPassword(user.password)
 
@@ -35,7 +44,7 @@ module.exports = app => {
       })
       res.status(204).send()
     } catch (error) {
-      res.status(500).send(console.log(error))
+      return res.status(500).send({ message: error.message })
     }
   }
 
