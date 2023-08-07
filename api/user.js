@@ -18,18 +18,23 @@ module.exports = app => {
     const user = req.body
 
     try {
-      validateFields([
-        { value: user.nome, message: "Nome não informado" },
-        { value: user.email, message: "E-mail não informado" },
-        {
-          value: user.password,
-          message: "Senha não informada",
-        },
-        {
-          value: user.confirmPassword,
-          message: "As senhas precisam ser iguais",
-        },
-      ])
+      if (user.password !== user.confirmPassword) {
+        res.status(500).send("As senhas são diferentes")
+      } else {
+        validateFields([
+          { value: user.nome, message: "Nome não informado" },
+          { value: user.email, message: "E-mail não informado" },
+          { value: user.CPF, message: "CPF não informado" },
+          {
+            value: user.password,
+            message: "Senha não informada",
+          },
+          {
+            value: user.confirmPassword,
+            message: "Confirmação de senha não informada",
+          },
+        ])
+      }
 
       user.password = encryptPassword(user.password)
 
@@ -44,7 +49,7 @@ module.exports = app => {
       })
       res.status(204).send()
     } catch (error) {
-      return res.status(500).send({ message: error.message })
+      res.status(500).send(console.log(error))
     }
   }
 
@@ -61,15 +66,13 @@ module.exports = app => {
   const remove = async (req, res) => {
     const nome = req.params.nome
     try {
-      existsOrError(req.params.nome, "Usuário não informado.")
-
-      const rowsDeleted = await app
+      await app
         .db("users")
         .where(builder => {
           builder.whereRaw("nome ILIKE ?", [`${nome}%`])
         })
         .del()
-      existsOrError(rowsDeleted, "Usuário não encontrado.")
+
       res.status(204).send()
     } catch (msg) {
       res.status(400).send(msg)
