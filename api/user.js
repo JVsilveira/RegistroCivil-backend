@@ -35,7 +35,7 @@ module.exports = app => {
       })
       res.status(204).send()
     } catch (error) {
-      res.status(500).send({ message })
+      res.status(500).send({ message: error.message })
     }
   }
 
