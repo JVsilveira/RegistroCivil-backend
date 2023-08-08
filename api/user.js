@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt-node")
 
 module.exports = app => {
-  const { existsOrError, notExistsOrError, equalsOrError } = app.api.validator
+  const { existsOrError, equalsOrError } = app.api.validator
 
   const encryptPassword = password => {
     const salt = bcrypt.genSaltSync(10)
@@ -35,7 +35,7 @@ module.exports = app => {
       })
       res.status(204).send()
     } catch (error) {
-      res.status(500).send({ message: error.message })
+      res.status(500).send({ message: message })
     }
   }
 
